@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sport Fryslân Kaart</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+  <script defer src="map.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>⚡ Sport Fryslân<br><span>CO Data analyse</span></h2>
+    <ul>
+      <li><a href="index.html">🏠 Dashboard</a></li>
+      <li><a href="#">📊 Vergelijker</a></li>
+      <li class="active"><a href="map.html">🗺️ Kaart</a></li>
+      <li><a href="#">❓ Uitleg</a></li>
+      <li><a href="#">⚙️ Instellingen</a></li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <h1>Kaart</h1>
+    <section class="filters">
+      <select><option>(Alle) Gemeente</option></select>
+      <select><option>(Alle) Sportbond</option></select>
+      <select><option>(Alle) Sport</option></select>
+      <select><option>(Alle) Doelgroep</option></select>
+      <select><option>(Alle) Profit / Non-profit</option></select>
+    </section>
+    <div id="map"></div>
+  </div>
+</body>
+</html>

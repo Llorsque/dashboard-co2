@@ -5,61 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sport Fryslân Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script defer src="app.js"></script>
 </head>
 <body>
   <div class="sidebar">
-    <h2>Sport Fryslân</h2>
+    <h2>⚡ Sport Fryslân<br><span>CO Data analyse</span></h2>
     <ul>
-      <li>Dashboard</li>
-      <li>Clubs</li>
+      <li><a href="index.html">🏠 Dashboard</a></li>
+      <li><a href="#">📊 Vergelijker</a></li>
+      <li><a href="map.html">🗺️ Kaart</a></li>
+      <li><a href="#">❓ Uitleg</a></li>
+      <li><a href="#">⚙️ Instellingen</a></li>
     </ul>
   </div>
 
-  <div class="main-content">
-    <header>
-      <div class="filters">
-        <input type="file" id="fileInput" />
-        <button id="loadBtn">Laad Database</button>
-        <button id="dummyBtn">Gebruik Dummy Data</button>
-        <select id="gemeenteFilter"><option value="">Gemeente</option></select>
-        <select id="sportFilter"><option value="">Sport</option></select>
-        <select id="doelgroepFilter"><option value="">Doelgroep</option></select>
-        <select id="profitFilter">
-          <option value="">Profit/Non-Profit</option>
-          <option value="Profit">Profit</option>
-          <option value="Non-Profit">Non-Profit</option>
-        </select>
-        <button id="resetBtn">Reset</button>
-      </div>
-    </header>
-
-    <section class="kpi-tiles">
-      <div class="tile"><i data-lucide="users"></i><h3 id="clubsCount">0</h3><p>Clubs</p></div>
-      <div class="tile"><i data-lucide="map-pin"></i><h3 id="gemeenteCount">0</h3><p>Gemeentes</p></div>
-      <div class="tile"><i data-lucide="dumbbell"></i><h3 id="sportCount">0</h3><p>Sporten</p></div>
-      <div class="tile"><i data-lucide="smile"></i><h3 id="ledenCount">0</h3><p>Leden</p></div>
+  <div class="main">
+    <h1>Dashboard</h1>
+    <section class="filters">
+      <button>Kies bestand</button>
+      <button class="primary">Laad dataset</button>
+      <button>Gebruik dummy data</button>
+      <select><option>(Alle) Gemeente</option></select>
+      <select><option>(Alle) Sportbond</option></select>
+      <select><option>(Alle) Sport</option></select>
+      <select><option>(Alle) Doelgroep</option></select>
+      <select><option>(Alle) Profit / Non-profit</option></select>
+      <button class="secondary">Wis filters</button>
     </section>
 
-    <section class="club-list">
-      <h2>Clubs</h2>
-      <ul id="clubList"></ul>
+    <section class="tiles">
+      <div class="tile"><h2>200</h2><p>Verenigingen (selectie)</p></div>
+      <div class="tile"><h2>35.648</h2><p>Totaal leden</p></div>
+      <div class="tile"><h2>178</h2><p>Gem. leden per vereniging</p></div>
+      <div class="tile"><h2>5.705</h2><p>Vrijwilligers totaal</p></div>
+      <div class="tile"><h2>16</h2><p>Vrijwilligers per 100 leden</p></div>
+      <div class="tile"><h2>16</h2><p>Unieke sporten</p></div>
+      <div class="tile"><h2>16</h2><p>Unieke sportbonden</p></div>
+      <div class="tile"><h2>18</h2><p>Unieke gemeenten</p></div>
+      <div class="tile"><h2>100%</h2><p>Met locatie</p></div>
+      <div class="tile"><h2>€174</h2><p>Gem. contributie</p></div>
+      <div class="tile"><h2>200/200</h2><p>Selectie / Totaal</p></div>
+      <div class="tile"><h2>352</h2><p>Meeste leden (vereniging)</p></div>
     </section>
   </div>
-
-  <!-- Popup -->
-  <div id="popup" class="popup">
-    <div class="popup-content">
-      <span id="closePopup">&times;</span>
-      <div id="popupDetails"></div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="app.js"></script>
-  <script>
-    lucide.createIcons();
-  </script>
 </body>
 </html>
