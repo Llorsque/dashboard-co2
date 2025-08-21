@@ -2,58 +2,66 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Sport Fryslân Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sport Fryslân - CO Data analyse</title>
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  <header>
-    <h1>Dashboard Sport Fryslân</h1>
-    <input type="file" id="file-input" />
-    <button id="load-btn">Laad database</button>
-  </header>
-
-  <section id="controls">
-    <h2>Filters</h2>
-    <div id="filters">
-      <div>
-        <h3>Gemeente</h3>
-        <div id="filter-gemeente"></div>
-      </div>
-      <div>
-        <h3>Sportsoort</h3>
-        <div id="filter-sport"></div>
-      </div>
-      <div>
-        <h3>Doelgroep</h3>
-        <div id="filter-doelgroep"></div>
-      </div>
-      <div>
-        <h3>Soort organisatie</h3>
-        <div id="filter-soort"></div>
-      </div>
+  <div class="sidebar">
+    <div class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">Sport Fryslân</span>
+      <span class="logo-sub">CO Data analyse</span>
     </div>
-  </section>
-
-  <section id="tiles">
-    <h2>KPI's</h2>
-    <div class="tile-grid" id="tile-grid"></div>
-  </section>
-
-  <section id="results">
-    <h2>Clubs</h2>
-    <ul id="club-list"></ul>
-  </section>
-
-  <!-- Popup modal -->
-  <div id="club-modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div id="club-details"></div>
-    </div>
+    <nav>
+      <ul>
+        <li class="active"><i data-lucide="home"></i> Dashboard</li>
+        <li><i data-lucide="bar-chart-2"></i> Vergelijker</li>
+        <li><i data-lucide="map"></i> Kaart</li>
+        <li><i data-lucide="help-circle"></i> Uitleg</li>
+        <li><i data-lucide="settings"></i> Instellingen</li>
+      </ul>
+    </nav>
   </div>
 
-  <script src="app.js"></script>
+  <div class="main">
+    <header>
+      <h1>Dashboard</h1>
+    </header>
+
+    <section class="filters">
+      <button class="btn">Kies bestand</button>
+      <button class="btn primary">Laad dataset</button>
+      <button class="btn">Gebruik dummy data</button>
+      <span class="dataset-status">Geen dataset geladen</span>
+      <div class="dropdowns">
+        <select><option>(Alle)</option></select>
+        <select><option>(Alle)</option></select>
+        <select><option>(Alle)</option></select>
+        <select><option>(Alle)</option></select>
+      </div>
+      <button class="btn secondary">Wis filters</button>
+    </section>
+
+    <section class="cards">
+      <div class="card"><i data-lucide="users"></i><h2>200</h2><p>Verenigingen (selectie)</p></div>
+      <div class="card"><i data-lucide="user-plus"></i><h2>35.648</h2><p>Totaal leden</p></div>
+      <div class="card"><i data-lucide="user-check"></i><h2>178</h2><p>Gem. leden per vereniging</p></div>
+      <div class="card"><i data-lucide="handshake"></i><h2>5.705</h2><p>Vrijwilligers totaal</p></div>
+      <div class="card"><i data-lucide="users-2"></i><h2>16</h2><p>Vrijwilligers per 100 leden</p></div>
+      <div class="card"><i data-lucide="activity"></i><h2>16</h2><p>Unieke sporten</p></div>
+      <div class="card"><i data-lucide="shield"></i><h2>16</h2><p>Unieke sportbonden</p></div>
+      <div class="card"><i data-lucide="map-pin"></i><h2>18</h2><p>Unieke gemeenten</p></div>
+      <div class="card"><i data-lucide="map"></i><h2>100%</h2><p>Met locatie</p></div>
+      <div class="card"><i data-lucide="euro"></i><h2>€174</h2><p>Gem. contributie</p></div>
+      <div class="card"><i data-lucide="list"></i><h2>200/200</h2><p>Selectie / Totaal</p></div>
+      <div class="card"><i data-lucide="award"></i><h2>352</h2><p>Meeste leden (vereniging)</p></div>
+    </section>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>
