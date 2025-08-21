@@ -1,126 +1,103 @@
-let clubs = [];
+let rawData = [];
+let filteredData = [];
 
-// Upload en laad
-document.getElementById('load-btn').addEventListener('click', () => {
-  const fileInput = document.getElementById('file-input');
-  if (!fileInput.files.length) {
-    alert('Upload eerst een Excel bestand');
-    return;
-  }
+// Bestand inladen
+document.getElementById('fileInput').addEventListener('change', handleFile);
+document.getElementById('dummyBtn').addEventListener('click', loadDummyData);
+document.getElementById('resetBtn').addEventListener('click', resetFilters);
+
+function handleFile(e) {
+  const file = e.target.files[0];
   const reader = new FileReader();
-  reader.onload = (e) => {
-    const data = new Uint8Array(e.target.result);
+  reader.onload = function(evt) {
+    const data = new Uint8Array(evt.target.result);
     const workbook = XLSX.read(data, { type: 'array' });
-    const firstSheet = workbook.SheetNames[0];
-    const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
-    clubs = sheetData;
-    initFilters();
-    renderAll(clubs);
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    rawData = XLSX.utils.sheet_to_json(sheet);
+    filteredData = rawData;
+    populateFilters();
+    render();
   };
-  reader.readAsArrayBuffer(fileInput.files[0]);
-});
-
-// Filters dynamisch vullen
-function initFilters() {
-  fillCheckboxes("filter-gemeente", [...new Set(clubs.map(c => c["Vestigingsgemeente"]))]);
-  fillCheckboxes("filter-sport", [...new Set(clubs.map(c => c["Subsoort organisatie"]))]);
-  fillCheckboxes("filter-doelgroep", ["0-4 jaar","4-12 jaar","Jongeren","Volwassenen","Senioren","Aangepast sporten"]);
-  fillCheckboxes("filter-soort", [...new Set(clubs.map(c => c["Soort Organisatie"]))]);
+  reader.readAsArrayBuffer(file);
 }
 
-function fillCheckboxes(containerId, items) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-  items.forEach(item => {
-    const label = document.createElement("label");
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.value = item;
-    input.addEventListener("change", applyFilters);
-    label.appendChild(input);
-    label.append(" " + item);
-    container.appendChild(label);
-    container.appendChild(document.createElement("br"));
-  });
-}
-
-// Filters toepassen
-function applyFilters() {
-  let filtered = [...clubs];
-
-  // Gemeente
-  const gemeenteSel = [...document.querySelectorAll("#filter-gemeente input:checked")].map(c => c.value);
-  if (gemeenteSel.length) filtered = filtered.filter(c => gemeenteSel.includes(c["Vestigingsgemeente"]));
-
-  // Sport
-  const sportSel = [...document.querySelectorAll("#filter-sport input:checked")].map(c => c.value);
-  if (sportSel.length) filtered = filtered.filter(c => sportSel.includes(c["Subsoort organisatie"]));
-
-  // Soort organisatie
-  const soortSel = [...document.querySelectorAll("#filter-soort input:checked")].map(c => c.value);
-  if (soortSel.length) filtered = filtered.filter(c => soortSel.includes(c["Soort Organisatie"]));
-
-  renderAll(filtered);
-}
-
-// Render tiles + lijst
-function renderAll(data) {
-  renderTiles(data);
-  renderList(data);
-}
-
-// Tiles renderen
-function renderTiles(data) {
-  const grid = document.getElementById("tile-grid");
-  grid.innerHTML = "";
-
-  if (data.length === 0) return;
-
-  const totalClubs = data.length;
-  const rookvrij = data.filter(c => c["Rookvrij"] == 1).length;
-  const accommodatie = data.filter(c => c["Eigen accommodatie"] == 1).length;
-
-  const tiles = [
-    { label: "Totaal clubs", value: totalClubs, percent: 100 },
-    { label: "Rookvrij", value: rookvrij, percent: (rookvrij/totalClubs*100) },
-    { label: "Eigen accommodatie", value: accommodatie, percent: (accommodatie/totalClubs*100) }
+function loadDummyData() {
+  rawData = [
+    { Naam: "VV Oerterp", Vestigingsgemeente: "Opsterland", Soort: "Voetbal", Doelgroep: "Jeugd", "Aantal leden": 150 },
+    { Naam: "SC Gorredijk", Vestigingsgemeente: "Opsterland", Soort: "Korfbal", Doelgroep: "Volwassenen", "Aantal leden": 120 },
+    { Naam: "VV Drachten", Vestigingsgemeente: "Smallingerland", Soort: "Voetbal", Doelgroep: "Senioren", "Aantal leden": 200 }
   ];
+  filteredData = rawData;
+  populateFilters();
+  render();
+}
 
-  tiles.forEach(t => {
-    const div = document.createElement("div");
-    div.className = "tile";
-    div.innerHTML = `<h3>${t.value}</h3><p>${t.label}</p><p>${t.percent.toFixed(0)}%</p>`;
-    grid.appendChild(div);
+function populateFilters() {
+  const gemeenteFilter = document.getElementById('gemeenteFilter');
+  const sportFilter = document.getElementById('sportFilter');
+  const doelgroepFilter = document.getElementById('doelgroepFilter');
+
+  let gemeentes = [...new Set(rawData.map(d => d.Vestigingsgemeente))];
+  let sporten = [...new Set(rawData.map(d => d.Soort))];
+  let doelgroepen = [...new Set(rawData.map(d => d.Doelgroep))];
+
+  gemeenteFilter.innerHTML = '<option value="">Gemeente</option>' + gemeentes.map(g => `<option value="${g}">${g}</option>`).join("");
+  sportFilter.innerHTML = '<option value="">Sport</option>' + sporten.map(s => `<option value="${s}">${s}</option>`).join("");
+  doelgroepFilter.innerHTML = '<option value="">Doelgroep</option>' + doelgroepen.map(d => `<option value="${d}">${d}</option>`).join("");
+
+  gemeenteFilter.onchange = filterData;
+  sportFilter.onchange = filterData;
+  doelgroepFilter.onchange = filterData;
+  document.getElementById('profitFilter').onchange = filterData;
+}
+
+function filterData() {
+  const gVal = document.getElementById('gemeenteFilter').value;
+  const sVal = document.getElementById('sportFilter').value;
+  const dVal = document.getElementById('doelgroepFilter').value;
+  const pVal = document.getElementById('profitFilter').value;
+
+  filteredData = rawData.filter(club =>
+    (gVal === "" || club.Vestigingsgemeente === gVal) &&
+    (sVal === "" || club.Soort === sVal) &&
+    (dVal === "" || club.Doelgroep === dVal) &&
+    (pVal === "" || club["Soort Organisatie"] === pVal)
+  );
+  render();
+}
+
+function resetFilters() {
+  document.getElementById('gemeenteFilter').value = "";
+  document.getElementById('sportFilter').value = "";
+  document.getElementById('doelgroepFilter').value = "";
+  document.getElementById('profitFilter').value = "";
+  filteredData = rawData;
+  render();
+}
+
+function render() {
+  document.getElementById('clubsCount').innerText = filteredData.length;
+  document.getElementById('gemeenteCount').innerText = new Set(filteredData.map(d => d.Vestigingsgemeente)).size;
+  document.getElementById('sportCount').innerText = new Set(filteredData.map(d => d.Soort)).size;
+  document.getElementById('ledenCount').innerText = filteredData.reduce((a, b) => a + (b["Aantal leden"] || 0), 0);
+
+  const clubList = document.getElementById('clubList');
+  clubList.innerHTML = "";
+  filteredData.forEach(club => {
+    const li = document.createElement('li');
+    li.innerText = club.Naam + " (" + club.Vestigingsgemeente + ")";
+    li.onclick = () => showPopup(club);
+    clubList.appendChild(li);
   });
 }
 
-// Lijst renderen
-function renderList(data) {
-  const list = document.getElementById("club-list");
-  list.innerHTML = "";
-  data.forEach(club => {
-    const li = document.createElement("li");
-    li.textContent = `${club.Naam} (${club["Vestigingsgemeente"]})`;
-    li.onclick = () => showClubDetails(club);
-    list.appendChild(li);
-  });
+function showPopup(club) {
+  const popup = document.getElementById('popup');
+  const details = document.getElementById('popupDetails');
+  details.innerHTML = Object.entries(club).map(([k,v]) => `<p><b>${k}:</b> ${v}</p>`).join("");
+  popup.style.display = 'block';
 }
 
-// Popup
-function showClubDetails(club) {
-  const modal = document.getElementById("club-modal");
-  const details = document.getElementById("club-details");
-  details.innerHTML = Object.entries(club)
-    .map(([k, v]) => `<p><strong>${k}:</strong> ${v == 1 ? "✔ Ja" : v == 0 ? "✖ Nee" : v}</p>`)
-    .join("");
-  modal.style.display = "block";
+document.getElementById('closePopup').onclick = () => {
+  document.getElementById('popup').style.display = 'none';
 }
-
-document.querySelector(".close").onclick = () => {
-  document.getElementById("club-modal").style.display = "none";
-};
-
-window.onclick = function(event) {
-  const modal = document.getElementById("club-modal");
-  if (event.target === modal) modal.style.display = "none";
-};
