@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Sport Fryslân Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Dashboard Sport Fryslân</h1>
+    <input type="file" id="file-input" />
+    <button id="load-btn">Laad database</button>
+  </header>
+
+  <section id="controls">
+    <h2>Filters</h2>
+    <div id="filters">
+      <div>
+        <h3>Gemeente</h3>
+        <div id="filter-gemeente"></div>
+      </div>
+      <div>
+        <h3>Sportsoort</h3>
+        <div id="filter-sport"></div>
+      </div>
+      <div>
+        <h3>Doelgroep</h3>
+        <div id="filter-doelgroep"></div>
+      </div>
+      <div>
+        <h3>Soort organisatie</h3>
+        <div id="filter-soort"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tiles">
+    <h2>KPI's</h2>
+    <div class="tile-grid" id="tile-grid"></div>
+  </section>
+
+  <section id="results">
+    <h2>Clubs</h2>
+    <ul id="club-list"></ul>
+  </section>
+
+  <!-- Popup modal -->
+  <div id="club-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="club-details"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
